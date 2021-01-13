@@ -1,6 +1,7 @@
 package io.kraftsman
 
 import io.kraftsman.entities.News
+import io.kraftsman.extensions.toDateString
 import io.kraftsman.requests.NewsRequest
 import io.kraftsman.responses.NewsResponse
 import io.kraftsman.tables.News as NewsTable
@@ -65,7 +66,7 @@ fun Application.module(testing: Boolean = false) {
                             id = it.id.value,
                             title = it.title,
                             summary = it.summary,
-                            date = it.date.toString("yyyy-MM-dd HH:mm:ss"),
+                            date = it.date.toDateString(),
                             imageUrl = it.imageUrl,
                             content = it.content,
                             editor = it.editor,
@@ -84,7 +85,7 @@ fun Application.module(testing: Boolean = false) {
                         id = it.id.value,
                         title = it.title,
                         summary = it.summary,
-                        date = it.date.toString("yyyy-MM-dd HH:mm:ss"),
+                        date = it.date.toDateString(),
                         imageUrl = it.imageUrl,
                         content = it.content,
                         editor = it.editor,
