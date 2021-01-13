@@ -13,5 +13,5 @@ class News(id: EntityID<Int>) : IntEntity(id) {
     var date by NewsTable.date
     var imageUrl by NewsTable.imageUrl
     var content by NewsTable.content
-    var another by NewsTable.another
+    var editor by NewsTable.editor
 }

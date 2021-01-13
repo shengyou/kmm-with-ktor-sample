@@ -45,7 +45,7 @@ fun Application.module(testing: Boolean = false) {
                 date = DateTime.now()
                 imageUrl = "http://www.google.com"
                 content = "Content $i"
-                another = "Another $i"
+                editor = "Editor $i"
             }
         }
     }
@@ -68,7 +68,7 @@ fun Application.module(testing: Boolean = false) {
                             date = it.date.toString("yyyy-MM-dd HH:mm:ss"),
                             imageUrl = it.imageUrl,
                             content = it.content,
-                            another = it.another,
+                            editor = it.editor,
                         )
                     }
             }
@@ -87,7 +87,7 @@ fun Application.module(testing: Boolean = false) {
                         date = it.date.toString("yyyy-MM-dd HH:mm:ss"),
                         imageUrl = it.imageUrl,
                         content = it.content,
-                        another = it.another,
+                        editor = it.editor,
                     )
                 }
             }

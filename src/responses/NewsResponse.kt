@@ -7,5 +7,5 @@ class NewsResponse(
     val date: String,
     val imageUrl: String,
     val content: String,
-    val another: String,
+    val editor: String,
 )

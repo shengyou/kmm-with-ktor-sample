@@ -9,5 +9,5 @@ object News: IntIdTable() {
     val date = datetime("date")
     val imageUrl = varchar("imageUrl", 500)
     val content = text("content")
-    val another = varchar("another", 255)
+    val editor = varchar("editor", 255)
 }
