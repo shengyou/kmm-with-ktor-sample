@@ -1,25 +1,26 @@
 package io.kraftsman
 
+import com.github.javafaker.Faker
 import io.kraftsman.entities.News
 import io.kraftsman.extensions.publicUrl
 import io.kraftsman.extensions.toDateString
 import io.kraftsman.requests.NewsRequest
 import io.kraftsman.responses.NewsResponse
-import io.kraftsman.services.Picsum
-import io.kraftsman.tables.News as NewsTable
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.jackson.*
-import io.ktor.response.*
 import io.ktor.request.*
+import io.ktor.response.*
 import io.ktor.routing.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
+import java.util.*
 import kotlin.random.Random
+import io.kraftsman.tables.News as NewsTable
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -43,15 +44,17 @@ fun Application.module(testing: Boolean = false) {
     }
 
     transaction {
+        val faker = Faker(Locale("zh-CN"))
+
         for (i in 1..10) {
             News.new {
-                title = "Title $i"
-                summary = "Summary $i"
+                title = faker.lorem().sentence()
+                summary = faker.lorem().paragraph(1)
                 date = DateTime.now()
                 //imageUrl = Picsum().getImage()
                 imageUrl = "$publicUrl/${Random.nextInt(1, 30)}.jpeg"
-                content = "Content $i"
-                editor = "Editor $i"
+                content = faker.lorem().paragraph(3)
+                editor = faker.name().fullName()
             }
         }
     }
