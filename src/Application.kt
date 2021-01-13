@@ -5,6 +5,7 @@ import io.kraftsman.extensions.publicUrl
 import io.kraftsman.extensions.toDateString
 import io.kraftsman.requests.NewsRequest
 import io.kraftsman.responses.NewsResponse
+import io.kraftsman.services.Picsum
 import io.kraftsman.tables.News as NewsTable
 import io.ktor.application.*
 import io.ktor.features.*
@@ -47,6 +48,7 @@ fun Application.module(testing: Boolean = false) {
                 title = "Title $i"
                 summary = "Summary $i"
                 date = DateTime.now()
+                //imageUrl = Picsum().getImage()
                 imageUrl = "$publicUrl/${Random.nextInt(1, 30)}.jpeg"
                 content = "Content $i"
                 editor = "Editor $i"
