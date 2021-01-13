@@ -1,6 +1,9 @@
 package io.kraftsman.extensions
 
+import io.ktor.application.*
 import org.joda.time.DateTime
+
+val Application.publicUrl get() = environment.config.property("ktor.asset.url").getString()
 
 fun DateTime.toDateString(): String {
     return this.toString("yyyy-MM-dd")

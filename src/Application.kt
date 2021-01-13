@@ -1,6 +1,7 @@
 package io.kraftsman
 
 import io.kraftsman.entities.News
+import io.kraftsman.extensions.publicUrl
 import io.kraftsman.extensions.toDateString
 import io.kraftsman.requests.NewsRequest
 import io.kraftsman.responses.NewsResponse
@@ -8,6 +9,7 @@ import io.kraftsman.tables.News as NewsTable
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.jackson.*
 import io.ktor.response.*
 import io.ktor.request.*
@@ -16,6 +18,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
+import kotlin.random.Random
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -44,7 +47,7 @@ fun Application.module(testing: Boolean = false) {
                 title = "Title $i"
                 summary = "Summary $i"
                 date = DateTime.now()
-                imageUrl = "http://www.google.com"
+                imageUrl = "$publicUrl/${Random.nextInt(1, 30)}.jpeg"
                 content = "Content $i"
                 editor = "Editor $i"
             }
@@ -52,6 +55,10 @@ fun Application.module(testing: Boolean = false) {
     }
 
     routing {
+
+        static("static") {
+            resources("static")
+        }
 
         get("/") {
             call.respond(mapOf("message" to "Hello, Ktor"))
