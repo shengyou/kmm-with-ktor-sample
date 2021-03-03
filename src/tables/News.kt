@@ -1,7 +1,7 @@
 package io.kraftsman.tables
 
 import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.jodatime.datetime
+import org.jetbrains.exposed.sql.`java-time`.datetime
 
 object News: IntIdTable() {
     val title = varchar("title", 255)

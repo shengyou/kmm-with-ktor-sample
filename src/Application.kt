@@ -1,6 +1,5 @@
 package io.kraftsman
 
-import com.github.javafaker.Faker
 import io.kraftsman.entities.News
 import io.kraftsman.extensions.publicUrl
 import io.kraftsman.extensions.toDateString
@@ -15,11 +14,14 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.serialization.*
 import kotlinx.serialization.json.Json
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.joda.time.DateTime
-import java.util.*
+import tw.ktrssreader.kotlin.parser.RssStandardParser
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 import io.kraftsman.tables.News as NewsTable
 
@@ -44,18 +46,24 @@ fun Application.module(testing: Boolean = false) {
         SchemaUtils.create(NewsTable)
     }
 
-    transaction {
-        val faker = Faker(Locale("zh-CN"))
+    val client = OkHttpClient()
+    val request = Request.Builder().url("https://blog.jetbrains.com/kotlin/feed/").build()
+    val xmlString = client.newCall(request).execute().body?.string() ?: ""
+    val rssParser = RssStandardParser().parse(xmlString)
 
-        for (i in 1..10) {
+    transaction {
+        rssParser.items?.forEach {
+            val formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss Z")
+            val datetime = LocalDateTime.parse(it.pubDate, formatter)
+
             News.new {
-                title = faker.lorem().sentence()
-                summary = faker.lorem().paragraph(1)
-                date = DateTime.now()
+                title = it.title.toString()
+                summary = it.description?.substring(0..150)+"..."
+                date = datetime
                 //imageUrl = Picsum().getImage()
                 imageUrl = "$publicUrl/${Random.nextInt(1, 30)}.jpeg"
-                content = faker.lorem().paragraph(3)
-                editor = faker.name().fullName()
+                content = it.description.toString()
+                editor = it.author.toString()
             }
         }
     }
@@ -91,9 +99,9 @@ fun Application.module(testing: Boolean = false) {
         }
 
         post("/news") {
-            val request = call.receive<NewsRequest>()
+            val newsRequest = call.receive<NewsRequest>()
             val newsResponse = transaction {
-                News.findById(request.id)?.let {
+                News.findById(newsRequest.id)?.let {
                     NewsResponse(
                         id = it.id.value,
                         title = it.title,
@@ -113,5 +121,4 @@ fun Application.module(testing: Boolean = false) {
             }
         }
     }
-
 }

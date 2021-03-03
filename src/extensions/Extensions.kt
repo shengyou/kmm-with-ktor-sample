@@ -1,14 +1,17 @@
 package io.kraftsman.extensions
 
 import io.ktor.application.*
-import org.joda.time.DateTime
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 val Application.publicUrl get() = environment.config.property("ktor.asset.url").getString()
 
-fun DateTime.toDateString(): String {
-    return this.toString("yyyy-MM-dd")
+fun LocalDateTime.toDateString(): String {
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    return this.format(formatter)
 }
 
-fun DateTime.toDateTimeString(): String {
-    return this.toString("yyyy-MM-dd HH:mm:ss")
+fun LocalDateTime.toDateTimeString(): String {
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    return this.format(formatter)
 }
