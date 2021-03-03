@@ -1,5 +1,8 @@
 package io.kraftsman.responses
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 class NewsResponse(
     val id: Int,
     val title: String,

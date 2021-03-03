@@ -1,8 +1,8 @@
 package io.kraftsman.requests
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import kotlinx.serialization.Serializable
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 data class NewsRequest(
     val id: Int,
     val title: String,
