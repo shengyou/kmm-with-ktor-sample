@@ -19,7 +19,7 @@ import okhttp3.Request
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
-import tw.ktrssreader.kotlin.parser.RssStandardParser
+import tw.ktrssreader.generated.JetBrainsCustomChannelParser
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
@@ -49,23 +49,21 @@ fun Application.module(testing: Boolean = false) {
     val client = OkHttpClient()
     val request = Request.Builder().url("https://blog.jetbrains.com/kotlin/feed/").build()
     val xmlString = client.newCall(request).execute().body?.string() ?: ""
-    val rssParser = RssStandardParser().parse(xmlString)
+    val rssChannel = JetBrainsCustomChannelParser.parse(xmlString)
 
     transaction {
-        rssParser.items?.forEach {
+        rssChannel.items.forEach { item ->
             val formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss Z")
-            val datetime = LocalDateTime.parse(it.pubDate, formatter)
-
-            println("Author: ${it.author.toString()}")
+            val datetime = LocalDateTime.parse(item.pubDate, formatter)
 
             News.new {
-                title = it.title.toString()
-                summary = it.description?.substring(0..150)+"..."
+                title = item.title.toString()
+                summary = item.description?.substring(0..150)+"..."
                 date = datetime
                 //imageUrl = Picsum().getImage()
                 imageUrl = "$publicUrl/${Random.nextInt(1, 30)}.jpeg"
-                content = it.description.toString()
-                editor = it.author.toString()
+                content = item.description.toString()
+                editor = item.author.toString()
             }
         }
     }
