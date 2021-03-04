@@ -56,6 +56,8 @@ fun Application.module(testing: Boolean = false) {
             val formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss Z")
             val datetime = LocalDateTime.parse(it.pubDate, formatter)
 
+            println("Author: ${it.author.toString()}")
+
             News.new {
                 title = it.title.toString()
                 summary = it.description?.substring(0..150)+"..."

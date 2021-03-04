@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.Coroutines
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 val kotlin_version: String by project
 val ktor_version: String by project
@@ -13,6 +14,13 @@ plugins {
     application
     kotlin("jvm") version "1.4.30"
     kotlin("plugin.serialization") version "1.4.30"
+    kotlin("kapt") version "1.4.30"
+}
+
+kapt {
+    arguments {
+        arg("pureKotlinParser", true)
+    }
 }
 
 group = "io.kraftsman"
@@ -40,6 +48,8 @@ dependencies {
     implementation("com.h2database:h2:$h2_version")
     implementation("com.squareup.okhttp3:okhttp:$okhttp_version")
     implementation("com.github.ivanisidrowu.KtRssReader:kotlin:$kt_rss_reader_version")
+    implementation("com.github.ivanisidrowu.KtRssReader:annotation:$kt_rss_reader_version")
+    kapt("com.github.ivanisidrowu.KtRssReader:processor:$kt_rss_reader_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 }
 
