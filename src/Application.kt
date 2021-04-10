@@ -22,6 +22,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import tw.ktrssreader.generated.JetBrainsCustomChannelParser
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.random.Random
 import io.kraftsman.tables.News as NewsTable
 
@@ -53,7 +54,7 @@ fun Application.module(testing: Boolean = false) {
 
     transaction {
         rssChannel.items.forEach { item ->
-            val formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss Z")
+            val formatter = DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH)
             val datetime = LocalDateTime.parse(item.pubDate, formatter)
 
             News.new {
